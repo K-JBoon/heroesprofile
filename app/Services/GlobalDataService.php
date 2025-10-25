@@ -294,6 +294,11 @@ class GlobalDataService
         return Hero::all()->firstWhere('name', $heroName);
     }
 
+    public function getHeroByName($heroName)
+    {
+        return Hero::where('name', $heroName)->first();
+    }
+
     public function getSeasonsData()
     {
         return SeasonDate::orderBy('id', 'desc')->get();

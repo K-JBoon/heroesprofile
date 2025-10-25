@@ -215,7 +215,8 @@ if (! env('Production')) {
             ];
         }
 
-        $hero = $this->globalDataService->getHeroes()->keyBy('name')[$request['hero']]->id;
+        $heroModel = $this->globalDataService->getHeroByName($request['hero']);
+        $hero = $heroModel->id;
 
         if ($request['timeframe_type'] == 'last_update') {
             $gameVersion = $this->globalDataService->getTimeframeFilterValuesLastUpdate($hero);
@@ -287,15 +288,12 @@ if (! env('Production')) {
             return $topBuilds;
         });
 
-        $talentData = HeroesDataTalent::all();
+        $talentData = HeroesDataTalent::where('hero_name', $heroModel->name)->get();
         $talentData = $talentData->keyBy('talent_id');
-
-        $heroData = $this->globalDataService->getHeroes();
-        $heroData = $heroData->keyBy('id');
 
         $sortBy = $statFilter == 'win_rate' ? 'win_rate' : 'total_filter_type';
 
-        $data->transform(function ($item) use ($talentData, $heroData) {
+        $data->transform(function ($item) use ($talentData, $heroModel) {
             $wins = $item['buildData']['wins'];
             $losses = $item['buildData']['losses'];
             $gamesPlayed = $wins + $losses;
@@ -304,7 +302,7 @@ if (! env('Production')) {
             // Add win rate to the item
             $item['games_played'] = $gamesPlayed;
             $item['win_rate'] = round($winRate * 100, 2);
-            $item['hero'] = $heroData[$item['hero']];
+            $item['hero'] = $heroModel;
             $item['level_one'] = isset($talentData[$item['level_one']]) ? $talentData[$item['level_one']] : null;
             $item['level_four'] = isset($talentData[$item['level_four']]) ? $talentData[$item['level_four']] : null;
             $item['level_seven'] = isset($talentData[$item['level_seven']]) ? $talentData[$item['level_seven']] : null;
