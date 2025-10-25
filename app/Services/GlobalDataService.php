@@ -291,7 +291,7 @@ class GlobalDataService
 
     public function getHeroModel($heroName)
     {
-        return Hero::where('name', $heroName)->first();
+        return Hero::firstWhere('name', $heroName);
     }
 
     public function getSeasonsData()
