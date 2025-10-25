@@ -215,7 +215,7 @@ if (! env('Production')) {
             ];
         }
 
-        $heroModel = $this->globalDataService->getHeroByName($request['hero']);
+        $heroModel = $this->globalDataService->getHeroModel($request['hero']);
         $hero = $heroModel->id;
 
         if ($request['timeframe_type'] == 'last_update') {

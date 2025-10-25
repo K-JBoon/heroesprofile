@@ -291,11 +291,6 @@ class GlobalDataService
 
     public function getHeroModel($heroName)
     {
-        return Hero::all()->firstWhere('name', $heroName);
-    }
-
-    public function getHeroByName($heroName)
-    {
         return Hero::where('name', $heroName)->first();
     }
 
